@@ -701,7 +701,7 @@
             <div class="card-number" style="font-size: 0.8rem;">&#9733;</div>
             <div class="card-title">Schnellstart: W&auml;hlt euer Szenario</div>
         </div>
-        <p class="card-subtitle">Wir f&uuml;llen realistische Branchenwerte vor. Ihr k&ouml;nnt danach alles anpassen.</p>
+        <p class="card-subtitle">Realistische Branchenwerte werden vorausgef&uuml;llt &ndash; ihr k&ouml;nnt alles anpassen.</p>
 
         <div class="industry-selector">
             <label>Branche / Unternehmenstyp</label>
@@ -717,7 +717,7 @@
                 <option value="bildung">Bildung &amp; &ouml;ffentlicher Sektor</option>
                 <option value="logistik">Logistik &amp; Transport</option>
             </select>
-            <div class="industry-hint">Die Branchenauswahl f&uuml;llt typische Durchschnittswerte vor &ndash; basierend auf Branchendaten und Erfahrungswerten.</div>
+            <div class="industry-hint">F&uuml;llt branchentypische Durchschnittswerte vor.</div>
             <div class="industry-values" id="industryValues"></div>
         </div>
 
@@ -750,7 +750,7 @@
             <div class="input-group">
                 <label>Anzahl Mitarbeitende <span class="hint">(die KI nutzen k&ouml;nnten)</span></label>
                 <input type="number" id="employees" value="150" min="10" max="5000" step="10">
-                <div class="context-hint">Nicht alle &ndash; nur B&uuml;ro-/Wissensarbeiter, die am PC arbeiten.</div>
+                <div class="context-hint">Nur B&uuml;ro-/Wissensarbeiter, die am PC arbeiten.</div>
             </div>
             <div class="input-group">
                 <label>Durchschn. Brutto-Stundensatz <span class="hint">(inkl. Lohnnebenkosten)</span></label>
@@ -758,7 +758,7 @@
                     <input type="number" id="hourlyRate" value="55" min="20" max="200" step="5">
                     <span>&euro;/Std</span>
                 </div>
-                <div class="context-hint"><strong>Faustregel:</strong> Jahresgehalt &divide; 1.600 Std &times; 1,3 (Nebenkosten). Bei 50k Gehalt &asymp; 41 &euro;, bei 70k &asymp; 57 &euro;.</div>
+                <div class="context-hint">Jahresgehalt &divide; 1.600 &times; 1,3. Bei 50k &asymp; 41 &euro;, bei 70k &asymp; 57 &euro;.</div>
             </div>
         </div>
         <div class="input-row">
@@ -787,7 +787,7 @@
                     <button onclick="setUsage(40)">Teilweise (~40%)</button>
                     <button onclick="setUsage(60)">Verbreitet (~60%)</button>
                 </div>
-                <div class="context-hint">Wie viel Prozent nutzen KI mindestens 1&times; pro Woche? <strong>Tipp:</strong> Die meisten KMU liegen bei 15&ndash;30%. Wenn ihr unsicher seid, w&auml;hlt &bdquo;Vereinzelt&ldquo; &ndash; das ist der h&auml;ufigste Startpunkt.</div>
+                <div class="context-hint">Anteil, der KI mind. 1&times;/Woche nutzt. Die meisten KMU starten bei 15&ndash;30%.</div>
             </div>
         </div>
     </div>
@@ -798,7 +798,7 @@
             <div class="card-number">2</div>
             <div class="card-title">Erwartete Wirkung</div>
         </div>
-        <p class="card-subtitle">Was passiert, wenn mehr Mitarbeitende KI sinnvoll nutzen? Die Voreinstellungen basieren auf Erfahrungswerten &ndash; passt sie nach eurer Einsch&auml;tzung an.</p>
+        <p class="card-subtitle">Was passiert, wenn mehr Mitarbeitende KI sinnvoll nutzen? Passt die Werte nach eurer Einsch&auml;tzung an.</p>
 
         <div class="slider-group">
             <div class="slider-header">
@@ -812,9 +812,7 @@
                 <span>10 Std</span>
             </div>
             <div class="slider-context">
-                <strong>Einordnung:</strong> Studien zeigen 2&ndash;5 Stunden Ersparnis pro Woche f&uuml;r geschulte Mitarbeitende.
-                Typische Werte: Sachbearbeitung ~2 Std, Marketing/Kommunikation ~4 Std, Entwicklung/Analyse ~5 Std.
-                <strong>Voreinstellung 3 Std = konservativer Durchschnitt.</strong>
+                Studien zeigen <strong>2&ndash;5 Std/Woche</strong> Ersparnis f&uuml;r geschulte Mitarbeitende. Sachbearbeitung ~2, Marketing ~4, Entwicklung ~5 Std.
             </div>
         </div>
 
@@ -830,9 +828,7 @@
                 <span>95% (Best Case)</span>
             </div>
             <div class="slider-context">
-                <strong>Erfahrungswert:</strong> Unternehmen mit einem aktiven Botschafter-Programm erreichen in der Praxis typischerweise 60&ndash;80% Nutzungsrate innerhalb von 12 Monaten.
-                Ohne gezieltes Programm stagniert die Adoption h&auml;ufig bei 15&ndash;30%.
-                <strong>70% ist ein erreichbares und realistisches Ziel f&uuml;r die meisten KMU.</strong>
+                Mit Botschafter-Programm: <strong>60&ndash;80%</strong> in 12 Monaten erreichbar. Ohne Programm stagniert die Nutzung oft bei 15&ndash;30%.
             </div>
         </div>
     </div>
@@ -843,39 +839,28 @@
             <div class="card-number">3</div>
             <div class="card-title">Investment ins Botschafter-Programm</div>
         </div>
-        <p class="card-subtitle">Was kostet der Aufbau? Die Werte sind vorausgef&uuml;llt &ndash; passt sie an euer Budget an.</p>
         <div class="input-row">
             <div class="input-group">
                 <label>Anzahl Botschafter <span class="hint" id="botschafterHint">(Empfehlung: 5&ndash;8)</span></label>
                 <input type="number" id="ambassadors" value="6" min="1" max="50" step="1">
-                <div class="context-hint"><strong>Faustregel:</strong> 1 Botschafter pro 20&ndash;30 Mitarbeitende. Bei 150 MA also 5&ndash;8 Personen.</div>
+                <div class="context-hint"><strong>Orientierung:</strong> Ca. 1 pro 20&ndash;30 MA. Rechnet mit 4 Std/Wo Zeitbudget.</div>
             </div>
             <div class="input-group">
-                <label>Zeitbudget pro Botschafter <span class="hint">(Std/Woche)</span></label>
-                <div class="input-suffix">
-                    <input type="number" id="ambassadorHours" value="4" min="2" max="16" step="1">
-                    <span>Std/Wo</span>
-                </div>
-                <div class="context-hint">Zeit f&uuml;r Sprechstunden, Schulungen, Community-Pflege. <strong>Typisch: 3&ndash;6 Std/Woche</strong> (ca. 10&ndash;15% der Arbeitszeit).</div>
-            </div>
-        </div>
-        <div class="input-row">
-            <div class="input-group">
-                <label>Initiales Training <span class="hint">(Kick-off, Schulung, Materialien)</span></label>
+                <label>Initiales Training <span class="hint">(Kick-off, Schulung)</span></label>
                 <div class="input-suffix">
                     <input type="number" id="trainingCost" value="12000" min="0" max="100000" step="1000">
                     <span>&euro;</span>
                 </div>
-                <div class="context-hint">Externes Training + Materialien. Bandbreite: 5.000&ndash;20.000 &euro; je nach Umfang.</div>
+                <div class="context-hint">Bandbreite: 5.000&ndash;20.000 &euro; je nach Umfang.</div>
             </div>
-            <div class="input-group">
-                <label>Laufende Kosten/Jahr <span class="hint">(Events, Tools, Plattform)</span></label>
-                <div class="input-suffix">
-                    <input type="number" id="ongoingCost" value="6000" min="0" max="100000" step="1000">
-                    <span>&euro;/Jahr</span>
-                </div>
-                <div class="context-hint">F&uuml;r Community-Events, Lunch &amp; Learn, Plattform-Lizenzen. Oft 3.000&ndash;10.000 &euro;/Jahr.</div>
+        </div>
+        <div class="input-group">
+            <label>Laufende Kosten/Jahr <span class="hint">(Events, Tools, Community)</span></label>
+            <div class="input-suffix">
+                <input type="number" id="ongoingCost" value="6000" min="0" max="100000" step="1000">
+                <span>&euro;/Jahr</span>
             </div>
+            <div class="context-hint">Community-Events, Lunch &amp; Learn, Plattform. Typisch 3.000&ndash;10.000 &euro;/Jahr.</div>
         </div>
     </div>
 
@@ -889,8 +874,7 @@
         <div class="waste-alert fade-in" id="wasteAlert">
             <h3>&#9888;&#65039; So viel zahlt ihr aktuell f&uuml;r ungenutzte KI-Lizenzen</h3>
             <div class="waste-explainer">
-                Jede Lizenz, die nicht aktiv genutzt wird, ist eine laufende Ausgabe ohne R&uuml;ckfluss.
-                Hier seht ihr, was die Differenz zwischen bezahlten und genutzten Lizenzen pro Jahr kostet:
+                Bezahlte, aber nicht aktiv genutzte Lizenzen &ndash; laufende Kosten ohne R&uuml;ckfluss:
             </div>
             <div class="waste-number" id="wasteAmount">&mdash;</div>
             <div class="waste-detail" id="wasteDetail"></div>
@@ -972,12 +956,10 @@
         </div>
 
         <!-- QUALITATIVE BENEFITS NOTE -->
-        <div class="fade-in" style="margin: 1rem 0 1.5rem; padding: 0.9rem 1.1rem; background: linear-gradient(135deg, rgba(201,162,39,0.06), rgba(70,100,122,0.05)); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; font-size: 0.84rem; color: var(--text-mid); line-height: 1.55;">
-            <strong style="color: var(--steel-dark);">&#128161; Nicht eingerechnet &ndash; aber real:</strong>
-            Dieser Rechner bildet nur die <em>quantifizierbaren</em> Effekte ab. In der Praxis kommen weitere Vorteile hinzu:
-            bessere Entscheidungsqualit&auml;t durch datengest&uuml;tzte Analysen, weniger Fehler in wiederkehrenden Prozessen,
-            schnellere Reaktionszeiten gegen&uuml;ber Kunden und h&ouml;here Mitarbeiterzufriedenheit durch Entlastung bei Routineaufgaben.
-            <strong>Der tats&auml;chliche Gesamtnutzen liegt daher in der Regel deutlich &uuml;ber dem hier berechneten ROI.</strong>
+        <div class="fade-in" style="margin: 1rem 0 1.5rem; padding: 0.75rem 1rem; background: linear-gradient(135deg, rgba(201,162,39,0.06), rgba(70,100,122,0.05)); border-left: 3px solid var(--gold); border-radius: 0 8px 8px 0; font-size: 0.82rem; color: var(--text-mid); line-height: 1.5;">
+            <strong style="color: var(--steel-dark);">&#128161; Nicht eingerechnet:</strong>
+            Bessere Entscheidungsqualit&auml;t, weniger Fehler, schnellere Reaktionszeiten, h&ouml;here Mitarbeiterzufriedenheit.
+            <strong>Der reale Gesamtnutzen liegt deutlich &uuml;ber dem berechneten ROI.</strong>
         </div>
 
         <!-- SENSITIVITY TABLE -->
@@ -986,8 +968,8 @@
                 <div class="card-number">?</div>
                 <div class="card-title">Was w&auml;re wenn? &mdash; Sensitivit&auml;tsanalyse</div>
             </div>
-            <p style="font-size: 0.88rem; color: var(--text-mid); margin-bottom: 1rem;">
-                So ver&auml;ndert sich euer ROI bei unterschiedlicher Zeitersparnis pro Mitarbeiter. Die gelb markierte Zeile zeigt eure aktuelle Einstellung:
+            <p style="font-size: 0.85rem; color: var(--text-mid); margin-bottom: 1rem;">
+                Euer ROI bei unterschiedlicher Zeitersparnis. Gelb = eure Einstellung:
             </p>
             <table class="sensitivity-table" id="sensitivityTable">
                 <thead>
@@ -1008,25 +990,22 @@
         <div class="insight-box fade-in">
             <h3>&#128218; Kernerkenntnis</h3>
             <p>
-                Der gr&ouml;&szlig;te Hebel liegt nicht in der Technologie, sondern in der <strong>Nutzungsrate</strong>.
-                Ein Unternehmen mit 150 Mitarbeitenden, das seine KI-Nutzungsrate von 25% auf 70% steigert,
-                gewinnt nicht 45% mehr Produktivit&auml;t &mdash; es gewinnt den <strong>gesamten ungenutzten Wert</strong>
-                seiner bestehenden Investition zur&uuml;ck. Genau daf&uuml;r sorgen KI-Botschafter.
+                Der gr&ouml;&szlig;te Hebel liegt in der <strong>Nutzungsrate</strong>, nicht in der Technologie.
+                Wer die Rate von 25% auf 70% steigert, gewinnt den <strong>gesamten ungenutzten Wert</strong>
+                der bestehenden Investition zur&uuml;ck. Genau daf&uuml;r sorgen KI-Botschafter.
             </p>
         </div>
 
         <!-- CTA -->
-        <div class="card fade-in" style="text-align: center; padding: 2rem;">
-            <p style="font-family: Georgia, serif; font-size: 1.1rem; color: var(--steel-dark); margin-bottom: 0.75rem;">
-                Ihr m&ouml;chtet wissen, wie ein Botschafter-Programm<br>konkret in eurem Unternehmen aussehen kann?
+        <div class="card fade-in" style="text-align: center; padding: 1.5rem;">
+            <p style="font-family: Georgia, serif; font-size: 1.05rem; color: var(--steel-dark); margin-bottom: 0.5rem;">
+                Den kompletten Fahrplan gibt&rsquo;s im Kompendium
             </p>
-            <p style="font-size: 0.9rem; color: var(--text-mid); margin-bottom: 1.25rem;">
-                Im <strong>Kompendium &bdquo;KI-Botschafter-Programm f&uuml;r KMU&ldquo;</strong> findet ihr den kompletten
-                Fahrplan &mdash; mit Toolboxen, Mail-Templates, Checklisten und Governance-Vorlagen.
+            <p style="font-size: 0.85rem; color: var(--text-mid); margin-bottom: 0.75rem;">
+                Toolboxen, Mail-Templates, Checklisten und Governance-Vorlagen &mdash; alles f&uuml;r euer Botschafter-Programm.
             </p>
-            <p style="font-size: 0.85rem; color: var(--text-muted);">
-                Nina Lindner &middot; xpand Deutschland GmbH<br>
-                <strong>KI kommt &uuml;ber Menschen ins Unternehmen, nicht &uuml;ber Tools.</strong>
+            <p style="font-size: 0.8rem; color: var(--text-muted);">
+                Nina Lindner &middot; xpand Deutschland GmbH &middot; <strong>KI kommt &uuml;ber Menschen ins Unternehmen.</strong>
             </p>
         </div>
     </div>
@@ -1130,9 +1109,9 @@
 
     // ===== SCENARIOS =====
     const scenarios = {
-        small: { employees: 50, hourlyRate: 45, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 65, ambassadors: 2, ambassadorHours: 3, trainingCost: 5000, ongoingCost: 3000 },
-        medium: { employees: 150, hourlyRate: 55, licenseCost: 30, currentUsage: 25, timeSavings: 3, targetUsage: 70, ambassadors: 6, ambassadorHours: 4, trainingCost: 12000, ongoingCost: 6000 },
-        large: { employees: 500, hourlyRate: 60, licenseCost: 30, currentUsage: 30, timeSavings: 3.5, targetUsage: 75, ambassadors: 18, ambassadorHours: 5, trainingCost: 25000, ongoingCost: 15000 }
+        small: { employees: 50, hourlyRate: 45, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 65, ambassadors: 2, trainingCost: 5000, ongoingCost: 3000 },
+        medium: { employees: 150, hourlyRate: 55, licenseCost: 30, currentUsage: 25, timeSavings: 3, targetUsage: 70, ambassadors: 6, trainingCost: 12000, ongoingCost: 6000 },
+        large: { employees: 500, hourlyRate: 60, licenseCost: 30, currentUsage: 30, timeSavings: 3.5, targetUsage: 75, ambassadors: 18, trainingCost: 25000, ongoingCost: 15000 }
     };
 
     function loadScenario(size) {
@@ -1144,7 +1123,6 @@
         document.getElementById('timeSavings').value = s.timeSavings;
         document.getElementById('targetUsage').value = s.targetUsage;
         document.getElementById('ambassadors').value = s.ambassadors;
-        document.getElementById('ambassadorHours').value = s.ambassadorHours;
         document.getElementById('trainingCost').value = s.trainingCost;
         document.getElementById('ongoingCost').value = s.ongoingCost;
 
@@ -1252,7 +1230,7 @@
         const timeSavings = parseFloat(document.getElementById('timeSavings').value) || 0;
         const targetUsage = parseFloat(document.getElementById('targetUsage').value) / 100;
         const ambassadors = parseInt(document.getElementById('ambassadors').value) || 0;
-        const ambassadorHours = parseFloat(document.getElementById('ambassadorHours').value) || 0;
+        const ambassadorHours = 4; // Fixer Wert: 4 Std/Woche pro Botschafter
         const trainingCost = parseFloat(document.getElementById('trainingCost').value) || 0;
         const ongoingCost = parseFloat(document.getElementById('ongoingCost').value) || 0;
         const weeksPerYear = 48;
@@ -1360,7 +1338,7 @@
         // === SENSITIVITY TABLE ===
         const tbody = document.getElementById('sensitivityBody');
         tbody.innerHTML = '';
-        const savingsOptions = [1, 2, 3, 4, 5, 6, 8, 10];
+        const savingsOptions = [1, 2, 3, 5, 8];
 
         savingsOptions.forEach(s => {
             const sNewHours = additionalAdopters * s * weeksPerYear;
