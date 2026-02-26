@@ -837,9 +837,9 @@
     <div class="card">
         <div class="card-header">
             <div class="card-number">2</div>
-            <div class="card-title">Erwartete Wirkung</div>
+            <div class="card-title">Erwartete Wirkung des Programms</div>
         </div>
-        <p class="card-subtitle">Was passiert, wenn mehr Mitarbeitende KI sinnvoll nutzen? Passt die Werte nach eurer Einsch&auml;tzung an.</p>
+        <p class="card-subtitle">Was k&ouml;nnte ein Botschafter-Programm bewirken? Passt die Werte nach eurer Einsch&auml;tzung an.</p>
 
         <div class="slider-group">
             <div class="slider-header">
@@ -1405,24 +1405,24 @@
         if (roi >= 200) {
             verdictCard.classList.add('positive');
             verdictIcon.textContent = '\u2705';
-            verdictText.textContent = 'Klare Empfehlung: Das Botschafter-Programm rechnet sich deutlich.';
-            verdictDetail.textContent = 'Mit einem ROI von ' + Math.round(roi) +
+            verdictText.textContent = 'Klare Empfehlung: Ein Botschafter-Programm w\u00fcrde sich deutlich rechnen.';
+            verdictDetail.textContent = 'Mit einem prognostizierten ROI von ' + Math.round(roi) +
                 '% und Break-Even nach ' + (Math.round(breakEvenMonths * 10) / 10) +
-                ' Monaten ist die Investition wirtschaftlich sehr attraktiv. ' +
-                'Jeder Monat ohne Programm kostet euer Unternehmen ' +
+                ' Monaten w\u00e4re die Investition wirtschaftlich sehr attraktiv. ' +
+                'Jeder Monat ohne Programm kostet euer Unternehmen potenziell ' +
                 formatEuro(Math.round(totalBenefit / 12)) + ' an ungenutztem Potenzial.';
         } else if (roi >= 50) {
             verdictCard.classList.add('positive');
             verdictIcon.textContent = '\u{1F44D}';
-            verdictText.textContent = 'Lohnt sich: Solider Business Case f\u00fcr ein Botschafter-Programm.';
-            verdictDetail.textContent = 'Ein ROI von ' + Math.round(roi) +
-                '% zeigt, dass sich die Investition auszahlt. ' +
+            verdictText.textContent = 'W\u00fcrde sich lohnen: Solider Business Case f\u00fcr ein Botschafter-Programm.';
+            verdictDetail.textContent = 'Ein prognostizierter ROI von ' + Math.round(roi) +
+                '% deutet darauf hin, dass sich die Investition auszahlen w\u00fcrde. ' +
                 'Tipp: Startet mit einer Pilotabteilung und skaliert nach den ersten Erfolgen.';
         } else if (roi >= 0) {
             verdictCard.classList.add('neutral');
             verdictIcon.textContent = '\u{1F914}';
             verdictText.textContent = 'Knapp positiv \u2013 pr\u00fcft die Annahmen.';
-            verdictDetail.textContent = 'Der ROI ist positiv, aber nicht \u00fcberw\u00e4ltigend. ' +
+            verdictDetail.textContent = 'Der prognostizierte ROI w\u00e4re positiv, aber nicht \u00fcberw\u00e4ltigend. ' +
                 '\u00dcberpr\u00fcft: Ist die gesch\u00e4tzte Zeitersparnis realistisch? ' +
                 'K\u00f6nntet ihr mit weniger Botschaftern starten? ' +
                 'Oft steigt der ROI im zweiten Jahr deutlich, wenn die Community w\u00e4chst.';
@@ -1430,10 +1430,10 @@
             verdictCard.classList.add('negative');
             verdictIcon.textContent = '\u26A0\uFE0F';
             verdictText.textContent = 'Noch nicht wirtschaftlich \u2013 aber pr\u00fcft die Parameter.';
-            verdictDetail.textContent = 'Mit den aktuellen Annahmen rechnet sich das Programm nicht im ersten Jahr. ' +
+            verdictDetail.textContent = 'Mit den aktuellen Annahmen w\u00fcrde sich das Programm im ersten Jahr nicht rechnen. ' +
                 'Typische Hebel: Zeitersparnis h\u00f6her ansetzen (Branchenbenchmarks pr\u00fcfen), ' +
                 'schlanker starten (weniger Botschafter, weniger Zeitbudget), ' +
-                'oder l\u00e4ngeren Zeithorizont betrachten (18-24 Monate).';
+                'oder l\u00e4ngeren Zeithorizont betrachten (18\u201324 Monate).';
         }
 
         // === SENSITIVITY TABLE ===
