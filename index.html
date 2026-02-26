@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ROI-Rechner: KI-Botschafter-Programm | Nina Lindner</title>
+    <title>ROI-Rechner: Was bringt ein Botschafter-Programm? | Nina Lindner</title>
     <style>
         /* ===== DESIGN SYSTEM (basierend auf Style Guide Nina Lindner / xpand) ===== */
         :root {
@@ -688,8 +688,8 @@
 <!-- ===== HEADER ===== -->
 <div class="header">
     <div class="header-label">Kompendium 2026 &mdash; KI-Botschafter-Programm f&uuml;r KMU</div>
-    <h1>Was kostet euch <span>ungenutztes KI-Potenzial?</span></h1>
-    <p>Die meisten KMU zahlen bereits f&uuml;r KI-Lizenzen &ndash; aber nur ein Bruchteil der Mitarbeitenden nutzt sie. Dieser Rechner zeigt dir in 2 Minuten, was das konkret kostet und wie ein Botschafter-Programm den Hebel umlegt.</p>
+    <h1>Was bringt ein <span>Botschafter-Programm?</span></h1>
+    <p>Die meisten KMU zahlen bereits f&uuml;r KI-Lizenzen &ndash; aber nur ein Bruchteil der Mitarbeitenden nutzt sie. Dieser Rechner zeigt euch in 2 Minuten, was das konkret kostet und wie ein Botschafter-Programm den Hebel umlegt.</p>
 </div>
 
 <!-- ===== MAIN ===== -->
@@ -699,9 +699,9 @@
     <div class="card">
         <div class="card-header">
             <div class="card-number" style="font-size: 0.8rem;">&#9733;</div>
-            <div class="card-title">Schnellstart: W&auml;hle dein Szenario</div>
+            <div class="card-title">Schnellstart: W&auml;hlt euer Szenario</div>
         </div>
-        <p class="card-subtitle">Wir f&uuml;llen realistische Branchenwerte vor. Du kannst danach alles anpassen.</p>
+        <p class="card-subtitle">Wir f&uuml;llen realistische Branchenwerte vor. Ihr k&ouml;nnt danach alles anpassen.</p>
 
         <div class="industry-selector">
             <label>Branche / Unternehmenstyp</label>
@@ -744,7 +744,7 @@
     <div class="card">
         <div class="card-header">
             <div class="card-number">1</div>
-            <div class="card-title">Dein Unternehmen</div>
+            <div class="card-title">Euer Unternehmen</div>
         </div>
         <div class="input-row">
             <div class="input-group">
@@ -787,7 +787,7 @@
                     <button onclick="setUsage(40)">Teilweise (~40%)</button>
                     <button onclick="setUsage(60)">Verbreitet (~60%)</button>
                 </div>
-                <div class="context-hint">Wie viel Prozent nutzen KI mindestens 1&times; pro Woche? <strong>Tipp:</strong> Die meisten KMU liegen bei 15&ndash;30%. Wenn du unsicher bist, w&auml;hle &bdquo;Vereinzelt&ldquo; &ndash; das ist der h&auml;ufigste Startpunkt.</div>
+                <div class="context-hint">Wie viel Prozent nutzen KI mindestens 1&times; pro Woche? <strong>Tipp:</strong> Die meisten KMU liegen bei 15&ndash;30%. Wenn ihr unsicher seid, w&auml;hlt &bdquo;Vereinzelt&ldquo; &ndash; das ist der h&auml;ufigste Startpunkt.</div>
             </div>
         </div>
     </div>
@@ -798,7 +798,7 @@
             <div class="card-number">2</div>
             <div class="card-title">Erwartete Wirkung</div>
         </div>
-        <p class="card-subtitle">Was passiert, wenn mehr Mitarbeitende KI sinnvoll nutzen? Die Voreinstellungen basieren auf Erfahrungswerten &ndash; passe sie nach deiner Einsch&auml;tzung an.</p>
+        <p class="card-subtitle">Was passiert, wenn mehr Mitarbeitende KI sinnvoll nutzen? Die Voreinstellungen basieren auf Erfahrungswerten &ndash; passt sie nach eurer Einsch&auml;tzung an.</p>
 
         <div class="slider-group">
             <div class="slider-header">
@@ -843,7 +843,7 @@
             <div class="card-number">3</div>
             <div class="card-title">Investment ins Botschafter-Programm</div>
         </div>
-        <p class="card-subtitle">Was kostet der Aufbau? Die Werte sind vorausgef&uuml;llt &ndash; passe sie an euer Budget an.</p>
+        <p class="card-subtitle">Was kostet der Aufbau? Die Werte sind vorausgef&uuml;llt &ndash; passt sie an euer Budget an.</p>
         <div class="input-row">
             <div class="input-group">
                 <label>Anzahl Botschafter <span class="hint" id="botschafterHint">(Empfehlung: 5&ndash;8)</span></label>
@@ -880,7 +880,7 @@
     </div>
 
     <!-- CALCULATE BUTTON -->
-    <button class="btn-calculate" onclick="calculate()">Ergebnis berechnen</button>
+    <button class="btn-calculate" onclick="calculateAndScroll()">Ergebnis berechnen</button>
 
     <!-- ===== RESULTS (hidden until calculated) ===== -->
     <div id="results" style="display: none;">
@@ -898,7 +898,7 @@
 
         <!-- MAIN RESULTS -->
         <div class="results-card fade-in">
-            <div class="results-title">Ergebnis: <span>Dein ROI auf einen Blick</span></div>
+            <div class="results-title">Ergebnis: <span>Euer ROI auf einen Blick</span></div>
 
             <div class="result-grid">
                 <div class="result-box highlight">
@@ -987,7 +987,7 @@
                 <div class="card-title">Was w&auml;re wenn? &mdash; Sensitivit&auml;tsanalyse</div>
             </div>
             <p style="font-size: 0.88rem; color: var(--text-mid); margin-bottom: 1rem;">
-                So ver&auml;ndert sich dein ROI bei unterschiedlicher Zeitersparnis pro Mitarbeiter. Die gelb markierte Zeile zeigt deine aktuelle Einstellung:
+                So ver&auml;ndert sich euer ROI bei unterschiedlicher Zeitersparnis pro Mitarbeiter. Die gelb markierte Zeile zeigt eure aktuelle Einstellung:
             </p>
             <table class="sensitivity-table" id="sensitivityTable">
                 <thead>
@@ -1018,10 +1018,10 @@
         <!-- CTA -->
         <div class="card fade-in" style="text-align: center; padding: 2rem;">
             <p style="font-family: Georgia, serif; font-size: 1.1rem; color: var(--steel-dark); margin-bottom: 0.75rem;">
-                Du m&ouml;chtest wissen, wie ein Botschafter-Programm<br>konkret in deinem Unternehmen aussehen kann?
+                Ihr m&ouml;chtet wissen, wie ein Botschafter-Programm<br>konkret in eurem Unternehmen aussehen kann?
             </p>
             <p style="font-size: 0.9rem; color: var(--text-mid); margin-bottom: 1.25rem;">
-                Im <strong>Kompendium &bdquo;KI-Botschafter-Programm f&uuml;r KMU&ldquo;</strong> findest du den kompletten
+                Im <strong>Kompendium &bdquo;KI-Botschafter-Programm f&uuml;r KMU&ldquo;</strong> findet ihr den kompletten
                 Fahrplan &mdash; mit Toolboxen, Mail-Templates, Checklisten und Governance-Vorlagen.
             </p>
             <p style="font-size: 0.85rem; color: var(--text-muted);">
@@ -1040,18 +1040,15 @@
             <a href="https://www.linkedin.com/in/nina-lindner/" target="_blank" rel="noopener">&#128218; Kompendium &amp; Whitepaper</a>
         </div>
         <div class="privacy">
-            <strong>&#128274; Datenschutzhinweis:</strong> Dieser Rechner verarbeitet alle Daten <strong>ausschlie&szlig;lich lokal in deinem Browser</strong>.
+            <strong>&#128274; Datenschutzhinweis:</strong> Dieser Rechner verarbeitet alle Daten <strong>ausschlie&szlig;lich lokal in eurem Browser</strong>.
             Es werden keine Daten an einen Server &uuml;bertragen, gespeichert oder an Dritte weitergegeben.
-            Es gibt kein Tracking, keine Cookies, keine Analyse-Tools. Deine Unternehmensdaten verlassen zu keinem Zeitpunkt dein Ger&auml;t.
+            Es gibt kein Tracking, keine Cookies, keine Analyse-Tools. Eure Unternehmensdaten verlassen zu keinem Zeitpunkt euer Ger&auml;t.
         </div>
         <p class="credit">Vom Menschen erdacht, von KI erweitert, vom Menschen gepr&uuml;ft und f&uuml;r gut befunden &hearts;</p>
     </div>
 </div>
 
 <script>
-    // ===== FLAG: suppress scroll on initial page load =====
-    let isInitialLoad = true;
-
     // ===== INDUSTRY DATA =====
     // Branchentypische Durchschnittswerte (Stundensatz inkl. Nebenkosten, typische KI-Nutzungsrate, Zeitersparnis, Lizenzkosten)
     const industries = {
@@ -1333,7 +1330,7 @@
             verdictDetail.textContent = 'Mit einem ROI von ' + Math.round(roi) +
                 '% und Break-Even nach ' + (Math.round(breakEvenMonths * 10) / 10) +
                 ' Monaten ist die Investition wirtschaftlich sehr attraktiv. ' +
-                'Jeder Monat ohne Programm kostet dein Unternehmen ' +
+                'Jeder Monat ohne Programm kostet euer Unternehmen ' +
                 formatEuro(Math.round(totalBenefit / 12)) + ' an ungenutztem Potenzial.';
         } else if (roi >= 50) {
             verdictCard.classList.add('positive');
@@ -1341,19 +1338,19 @@
             verdictText.textContent = 'Lohnt sich: Solider Business Case f\u00fcr ein Botschafter-Programm.';
             verdictDetail.textContent = 'Ein ROI von ' + Math.round(roi) +
                 '% zeigt, dass sich die Investition auszahlt. ' +
-                'Tipp: Starte mit einer Pilotabteilung und skaliere nach den ersten Erfolgen.';
+                'Tipp: Startet mit einer Pilotabteilung und skaliert nach den ersten Erfolgen.';
         } else if (roi >= 0) {
             verdictCard.classList.add('neutral');
             verdictIcon.textContent = '\u{1F914}';
-            verdictText.textContent = 'Knapp positiv \u2013 pr\u00fcfe die Annahmen.';
+            verdictText.textContent = 'Knapp positiv \u2013 pr\u00fcft die Annahmen.';
             verdictDetail.textContent = 'Der ROI ist positiv, aber nicht \u00fcberw\u00e4ltigend. ' +
-                '\u00dcberpr\u00fcfe: Ist die gesch\u00e4tzte Zeitersparnis realistisch? ' +
-                'K\u00f6nntest du mit weniger Botschaftern starten? ' +
+                '\u00dcberpr\u00fcft: Ist die gesch\u00e4tzte Zeitersparnis realistisch? ' +
+                'K\u00f6nntet ihr mit weniger Botschaftern starten? ' +
                 'Oft steigt der ROI im zweiten Jahr deutlich, wenn die Community w\u00e4chst.';
         } else {
             verdictCard.classList.add('negative');
             verdictIcon.textContent = '\u26A0\uFE0F';
-            verdictText.textContent = 'Noch nicht wirtschaftlich \u2013 aber pr\u00fcfe die Parameter.';
+            verdictText.textContent = 'Noch nicht wirtschaftlich \u2013 aber pr\u00fcft die Parameter.';
             verdictDetail.textContent = 'Mit den aktuellen Annahmen rechnet sich das Programm nicht im ersten Jahr. ' +
                 'Typische Hebel: Zeitersparnis h\u00f6her ansetzen (Branchenbenchmarks pr\u00fcfen), ' +
                 'schlanker starten (weniger Botschafter, weniger Zeitbudget), ' +
@@ -1385,17 +1382,17 @@
             tbody.appendChild(tr);
         });
 
-        // Scroll to results (but not on initial page load)
-        if (!isInitialLoad) {
-            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
     }
 
-    // Auto-calculate on load, then ensure page starts at top
+    // Separate function for the button — calculates AND scrolls
+    function calculateAndScroll() {
+        calculate();
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Auto-calculate on load (no scroll), then ensure page starts at top
     window.addEventListener('load', function() {
         calculate();
-        isInitialLoad = false;
-        // Ensure page starts at top
         window.scrollTo(0, 0);
     });
 </script>
