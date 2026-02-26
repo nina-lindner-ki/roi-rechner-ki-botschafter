@@ -676,10 +676,44 @@
 
         /* ===== PRINT STYLES ===== */
         @media print {
-            body { background: white; }
-            .header { break-after: avoid; }
-            .card, .results-card, .waste-alert, .verdict-card { break-inside: avoid; }
-            .btn-calculate { display: none; }
+            * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { background: white !important; font-size: 10pt; }
+            .container { max-width: 100%; padding: 0.5rem; }
+
+            /* Hide interactive-only elements */
+            .scenario-bar, .industry-selector, .quick-select,
+            .btn-calculate, .no-print { display: none !important; }
+            input[type="range"] { display: none !important; }
+            .slider-labels { display: none !important; }
+            .slider-context { display: none !important; }
+
+            /* Make inputs look like plain text */
+            input[type="number"], select {
+                border: none !important;
+                background: transparent !important;
+                font-weight: bold !important;
+                padding: 0.2rem 0 !important;
+                box-shadow: none !important;
+            }
+            .input-suffix span { color: var(--text-dark) !important; }
+
+            /* Show slider values as prominent text */
+            .slider-header { margin-bottom: 0 !important; }
+            .slider-value { font-size: 1.2rem !important; }
+            .slider-group { margin-bottom: 0.75rem !important; }
+
+            /* Page break control */
+            .header { break-after: avoid; padding: 1.25rem !important; }
+            .card { box-shadow: none !important; border: 1px solid #ddd; break-inside: avoid; margin-bottom: 0.75rem; padding: 1.25rem; }
+            .results-card { break-inside: avoid; }
+            .waste-alert { break-inside: avoid; }
+            .verdict-card { break-inside: avoid; }
+            .insight-box { break-inside: avoid; }
+            .sensitivity-table { font-size: 8pt; }
+
+            /* Footer compact */
+            .footer { border-top: 1px solid #ccc; padding: 1rem; font-size: 8pt; }
+            .footer .privacy { font-size: 7pt; }
         }
     </style>
 </head>
@@ -747,10 +781,17 @@
             <div class="card-title">Euer Unternehmen</div>
         </div>
         <div class="input-row">
-            <div class="input-group">
-                <label>Anzahl Mitarbeitende <span class="hint">(die KI nutzen k&ouml;nnten)</span></label>
-                <input type="number" id="employees" value="150" min="10" max="5000" step="10">
-                <div class="context-hint">Nur B&uuml;ro-/Wissensarbeiter, die am PC arbeiten.</div>
+            <div>
+                <div class="input-group">
+                    <label>Anzahl Mitarbeitende <span class="hint">(die KI nutzen k&ouml;nnten)</span></label>
+                    <input type="number" id="employees" value="150" min="10" max="5000" step="10">
+                    <div class="context-hint">Nur B&uuml;ro-/Wissensarbeiter, die am PC arbeiten.</div>
+                </div>
+                <div class="input-group">
+                    <label>Davon mit KI-Lizenz <span class="hint">(bezahlte Seats)</span></label>
+                    <input type="number" id="licensedEmployees" value="150" min="0" max="5000" step="10">
+                    <div class="context-hint">Nur bezahlte KI-Seats z&auml;hlen. Gleich MA-Zahl, wenn alle eine Lizenz haben.</div>
+                </div>
             </div>
             <div class="input-group">
                 <label>Durchschn. Brutto-Stundensatz <span class="hint">(inkl. Lohnnebenkosten)</span></label>
@@ -1008,6 +1049,11 @@
                 Nina Lindner &middot; xpand Deutschland GmbH &middot; <strong>KI kommt &uuml;ber Menschen ins Unternehmen.</strong>
             </p>
         </div>
+
+        <!-- PRINT / SHARE -->
+        <div class="no-print fade-in" style="text-align: center; margin: 1.25rem 0;">
+            <button onclick="window.print()" style="padding: 0.75rem 2rem; background: var(--steel-dark); color: var(--white); border: none; border-radius: 6px; font-size: 0.9rem; font-weight: bold; cursor: pointer; font-family: Arial, sans-serif; letter-spacing: 0.3px; transition: background 0.2s;" onmouseover="this.style.background='var(--steel-light)'" onmouseout="this.style.background='var(--steel-dark)'">&#128424; Ergebnis als PDF speichern</button>
+        </div>
     </div>
 
     <!-- FOOTER -->
@@ -1105,6 +1151,9 @@
         calculate();
     }
 
+    // ===== STATE FLAGS =====
+    let licensesManuallySet = false;
+
     // ===== SCENARIOS =====
     const scenarios = {
         small: { employees: 50, hourlyRate: 45, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 65, ambassadors: 2, trainingCost: 5000, ongoingCost: 3000 },
@@ -1118,6 +1167,8 @@
 
         // Always set size-dependent values from scenario
         document.getElementById('employees').value = s.employees;
+        document.getElementById('licensedEmployees').value = s.employees;
+        licensesManuallySet = false;
         document.getElementById('ambassadors').value = s.ambassadors;
         document.getElementById('trainingCost').value = s.trainingCost;
         document.getElementById('ongoingCost').value = s.ongoingCost;
@@ -1230,10 +1281,20 @@
         return Math.round(15 + ((emp - 501) / 500) * 10);
     }
 
+    const licensedEmployeesInput = document.getElementById('licensedEmployees');
+
     employeesInput.addEventListener('input', () => {
         const emp = parseInt(employeesInput.value) || 0;
         updateBotschafterHint(emp);
         document.getElementById('ambassadors').value = getRecommendedAmbassadors(emp);
+        // Sync licensed employees if user hasn't manually changed it
+        if (!licensesManuallySet) {
+            licensedEmployeesInput.value = emp;
+        }
+    });
+
+    licensedEmployeesInput.addEventListener('input', () => {
+        licensesManuallySet = true;
     });
 
     // ===== FORMATTING =====
@@ -1268,20 +1329,26 @@
         const ongoingCost = parseFloat(document.getElementById('ongoingCost').value) || 0;
         const weeksPerYear = 48;
 
-        // === WASTE CALCULATION ===
-        const unusedLicenses = employees * (1 - currentUsage);
+        // === WASTE CALCULATION (based on actual licenses, not total employees) ===
+        const licensedEmployees = parseInt(document.getElementById('licensedEmployees').value) || 0;
+        const activeUsers = Math.round(employees * currentUsage);
+        const unusedLicenses = Math.max(0, licensedEmployees - activeUsers);
         const wastePerMonth = unusedLicenses * licenseCost;
         const wastePerYear = wastePerMonth * 12;
 
         const wasteAlert = document.getElementById('wasteAlert');
-        if (licenseCost > 0 && currentUsage < 1) {
+        if (licenseCost > 0 && unusedLicenses > 0) {
             wasteAlert.style.display = 'block';
             document.getElementById('wasteAmount').textContent = formatEuro(wastePerYear) + ' / Jahr';
-            document.getElementById('wasteDetail').innerHTML =
-                formatNumber(Math.round(unusedLicenses)) + ' von ' + employees +
-                ' Mitarbeitenden nutzen ihre KI-Lizenz nicht regelm\u00e4\u00dfig. ' +
+            let wasteHtml = formatNumber(unusedLicenses) + ' von ' + formatNumber(licensedEmployees) +
+                ' bezahlten KI-Lizenzen werden nicht regelm\u00e4\u00dfig genutzt. ' +
                 'Das sind ' + formatEuro(wastePerMonth) + ' pro Monat an bezahlten, aber ungenutzten Lizenzen \u2013 ' +
                 '<strong>noch bevor wir die entgangene Produktivit\u00e4t einrechnen.</strong>';
+            if (licensedEmployees < employees) {
+                wasteHtml += '<br><em style="opacity:0.8;">Hinweis: Nur ' + formatNumber(licensedEmployees) +
+                    ' von ' + formatNumber(employees) + ' Mitarbeitenden haben \u00fcberhaupt eine KI-Lizenz.</em>';
+            }
+            document.getElementById('wasteDetail').innerHTML = wasteHtml;
         } else {
             wasteAlert.style.display = 'none';
         }
@@ -1297,8 +1364,9 @@
         const totalSavedHours = newUserHours + existingUserBoost;
         const productivityGain = totalSavedHours * hourlyRate;
 
-        const newUnused = employees * (1 - targetUsage);
-        const savedLicenseCosts = (unusedLicenses - newUnused) * licenseCost * 12;
+        const newActiveUsers = Math.round(employees * targetUsage);
+        const newUnusedLicenses = Math.max(0, licensedEmployees - newActiveUsers);
+        const savedLicenseCosts = (unusedLicenses - newUnusedLicenses) * licenseCost * 12;
         const savedLicenseValue = Math.max(0, savedLicenseCosts);
 
         const totalBenefit = productivityGain + savedLicenseValue;
