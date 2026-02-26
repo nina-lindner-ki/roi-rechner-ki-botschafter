@@ -575,6 +575,63 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
+        /* ===== INDUSTRY SELECTOR ===== */
+        .industry-selector {
+            margin-bottom: 1.25rem;
+        }
+        .industry-selector label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--steel-dark);
+            margin-bottom: 0.4rem;
+        }
+        .industry-selector select {
+            width: 100%;
+            padding: 0.65rem 0.9rem;
+            border: 2px solid var(--cream-dark);
+            border-radius: 8px;
+            background: var(--white);
+            font-family: Arial, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            transition: border-color 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23375368' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.9rem center;
+            padding-right: 2.5rem;
+        }
+        .industry-selector select:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+        .industry-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.35rem;
+            line-height: 1.4;
+        }
+        .industry-values {
+            display: none;
+            margin-top: 0.75rem;
+            padding: 0.75rem 1rem;
+            background: rgba(201, 162, 39, 0.06);
+            border: 1px solid rgba(201, 162, 39, 0.2);
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: var(--text-mid);
+            line-height: 1.6;
+        }
+        .industry-values.visible {
+            display: block;
+        }
+        .industry-values strong {
+            color: var(--steel-dark);
+        }
+
         /* ===== SCENARIO SELECTOR ===== */
         .scenario-bar {
             display: flex;
@@ -644,7 +701,26 @@
             <div class="card-number" style="font-size: 0.8rem;">&#9733;</div>
             <div class="card-title">Schnellstart: W&auml;hle dein Szenario</div>
         </div>
-        <p class="card-subtitle">Wir f&uuml;llen realistische Werte vor. Du kannst danach alles anpassen.</p>
+        <p class="card-subtitle">Wir f&uuml;llen realistische Branchenwerte vor. Du kannst danach alles anpassen.</p>
+
+        <div class="industry-selector">
+            <label>Branche / Unternehmenstyp</label>
+            <select id="industrySelect" onchange="loadIndustry(this.value)">
+                <option value="">-- Branche w&auml;hlen (optional) --</option>
+                <option value="maschinenbau">Maschinenbau &amp; Industrie</option>
+                <option value="handwerk">Handwerk &amp; Baugewerbe</option>
+                <option value="it_dienstleistung">IT &amp; Technologie-Dienstleistung</option>
+                <option value="beratung">Beratung &amp; Agentur</option>
+                <option value="handel">Handel &amp; E-Commerce</option>
+                <option value="gesundheit">Gesundheitswesen &amp; Pflege</option>
+                <option value="finanzen">Finanzwesen &amp; Versicherung</option>
+                <option value="bildung">Bildung &amp; &ouml;ffentlicher Sektor</option>
+                <option value="logistik">Logistik &amp; Transport</option>
+            </select>
+            <div class="industry-hint">Die Branchenauswahl f&uuml;llt typische Durchschnittswerte vor &ndash; basierend auf Branchendaten und Erfahrungswerten.</div>
+            <div class="industry-values" id="industryValues"></div>
+        </div>
+
         <div class="scenario-bar">
             <button class="scenario-btn" onclick="loadScenario('small')">
                 <div class="scenario-label">Kleines KMU</div>
@@ -964,6 +1040,88 @@
 </div>
 
 <script>
+    // ===== FLAG: suppress scroll on initial page load =====
+    let isInitialLoad = true;
+
+    // ===== INDUSTRY DATA =====
+    // Branchentypische Durchschnittswerte (Stundensatz inkl. Nebenkosten, typische KI-Nutzungsrate, Zeitersparnis, Lizenzkosten)
+    const industries = {
+        maschinenbau: {
+            name: 'Maschinenbau & Industrie',
+            hourlyRate: 55, licenseCost: 30, currentUsage: 20, timeSavings: 2.5, targetUsage: 65,
+            hint: 'Typisch: Technische Dokumentation, Qualit\u00e4tsmanagement, Angebotserstellung. Stundensatz basiert auf Ingenieurs-/Facharbeitermix.'
+        },
+        handwerk: {
+            name: 'Handwerk & Baugewerbe',
+            hourlyRate: 42, licenseCost: 20, currentUsage: 10, timeSavings: 2, targetUsage: 55,
+            hint: 'KI-Potenzial v.a. in B\u00fcro/Verwaltung: Angebote, Rechnungen, Kundenkommunikation. Geringerer B\u00fcroanteil = weniger KI-Nutzer.'
+        },
+        it_dienstleistung: {
+            name: 'IT & Technologie-Dienstleistung',
+            hourlyRate: 70, licenseCost: 55, currentUsage: 40, timeSavings: 4, targetUsage: 80,
+            hint: 'H\u00f6chstes KI-Potenzial: Code-Assistenz, Testing, Dokumentation, Support. Oft bereits mehrere KI-Tools im Einsatz.'
+        },
+        beratung: {
+            name: 'Beratung & Agentur',
+            hourlyRate: 65, licenseCost: 30, currentUsage: 35, timeSavings: 3.5, targetUsage: 75,
+            hint: 'Starker Hebel bei Research, Pr\u00e4sentationen, Texterstellung, Datenanalyse. Wissensarbeiter profitieren \u00fcberdurchschnittlich.'
+        },
+        handel: {
+            name: 'Handel & E-Commerce',
+            hourlyRate: 45, licenseCost: 20, currentUsage: 20, timeSavings: 2.5, targetUsage: 65,
+            hint: 'KI-Potenzial in Produktbeschreibungen, Kundenservice, Bestandsplanung, Marketing-Texte.'
+        },
+        gesundheit: {
+            name: 'Gesundheitswesen & Pflege',
+            hourlyRate: 48, licenseCost: 20, currentUsage: 10, timeSavings: 2, targetUsage: 50,
+            hint: 'KI-Nutzung v.a. in Verwaltung und Dokumentation. Strenge Datenschutz-Anforderungen begrenzen manche Anwendungen.'
+        },
+        finanzen: {
+            name: 'Finanzwesen & Versicherung',
+            hourlyRate: 62, licenseCost: 30, currentUsage: 25, timeSavings: 3, targetUsage: 70,
+            hint: 'Gro\u00dfer Hebel bei Analyse, Reporting, Compliance-Texten, Kundenkorrespondenz. Regulatorik erfordert sorgf\u00e4ltige Einf\u00fchrung.'
+        },
+        bildung: {
+            name: 'Bildung & \u00f6ffentlicher Sektor',
+            hourlyRate: 40, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 55,
+            hint: 'Potenzial in Verwaltung, Lehrplanerstellung, Kommunikation. Oft begrenzte Budgets, aber hoher Effizienzgewinn m\u00f6glich.'
+        },
+        logistik: {
+            name: 'Logistik & Transport',
+            hourlyRate: 45, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 60,
+            hint: 'KI-Potenzial in Disposition, Routenplanung, Kundenkommunikation, Schadensdokumentation.'
+        }
+    };
+
+    function loadIndustry(key) {
+        const infoBox = document.getElementById('industryValues');
+        if (!key || !industries[key]) {
+            infoBox.classList.remove('visible');
+            return;
+        }
+        const ind = industries[key];
+        // Fill in industry-specific values (keep employee count and program costs from scenario)
+        document.getElementById('hourlyRate').value = ind.hourlyRate;
+        document.getElementById('licenseCost').value = ind.licenseCost;
+        document.getElementById('currentUsage').value = ind.currentUsage;
+        document.getElementById('timeSavings').value = ind.timeSavings;
+        document.getElementById('targetUsage').value = ind.targetUsage;
+
+        timeSavingsDisplay.textContent = ind.timeSavings + ' Std/Woche';
+        targetUsageDisplay.textContent = ind.targetUsage + '%';
+
+        updateUsageQuickSelect(ind.currentUsage);
+        updateLicenseQuickSelect(ind.licenseCost);
+
+        // Show info box
+        infoBox.innerHTML = '<strong>' + ind.name + ':</strong> ' + ind.hint +
+            '<br><em>Vorausgef\u00fcllt: ' + ind.hourlyRate + ' \u20ac/Std \u00b7 Nutzungsrate ' + ind.currentUsage +
+            '% \u00b7 Zeitersparnis ' + ind.timeSavings + ' Std/Wo \u00b7 Lizenz ' + ind.licenseCost + ' \u20ac/Mo</em>';
+        infoBox.classList.add('visible');
+
+        calculate();
+    }
+
     // ===== SCENARIOS =====
     const scenarios = {
         small: { employees: 50, hourlyRate: 45, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 65, ambassadors: 2, ambassadorHours: 3, trainingCost: 5000, ongoingCost: 3000 },
@@ -990,6 +1148,10 @@
         // Update active states
         document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
         event.currentTarget.classList.add('active');
+
+        // Reset industry dropdown (scenario overrides industry values)
+        document.getElementById('industrySelect').value = '';
+        document.getElementById('industryValues').classList.remove('visible');
 
         // Update quick-select active states
         updateUsageQuickSelect(s.currentUsage);
@@ -1214,12 +1376,19 @@
             tbody.appendChild(tr);
         });
 
-        // Scroll to results
-        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        // Scroll to results (but not on initial page load)
+        if (!isInitialLoad) {
+            document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
     }
 
-    // Auto-calculate on load
-    window.addEventListener('load', calculate);
+    // Auto-calculate on load, then ensure page starts at top
+    window.addEventListener('load', function() {
+        calculate();
+        isInitialLoad = false;
+        // Ensure page starts at top
+        window.scrollTo(0, 0);
+    });
 </script>
 
 </body>
