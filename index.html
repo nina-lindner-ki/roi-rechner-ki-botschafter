@@ -1,0 +1,1188 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ROI-Rechner: KI-Botschafter-Programm | Nina Lindner</title>
+    <style>
+        /* ===== DESIGN SYSTEM (basierend auf Style Guide Nina Lindner / xpand) ===== */
+        :root {
+            --steel-dark: #375368;
+            --steel-mid: #3b576c;
+            --steel-light: #46647a;
+            --gold: #c9a227;
+            --gold-button: #caa763;
+            --gold-light: #d4b84a;
+            --cream: #f5f0ec;
+            --cream-warm: #f9f0eb;
+            --cream-dark: #e8e4dc;
+            --text-dark: #1a1a1a;
+            --text-mid: #4a4a4a;
+            --text-muted: #6b7280;
+            --white: #ffffff;
+            --green-cream: #ecf3ec;
+            --red-soft: #fef2f2;
+            --red-text: #991b1b;
+            --green-soft: #f0fdf4;
+            --green-text: #166534;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: var(--cream);
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        /* ===== HEADER ===== */
+        .header {
+            background: linear-gradient(180deg, #2f4b60 0%, #405f73 100%);
+            color: var(--white);
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+        }
+        .header-label {
+            font-size: 0.75rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+        .header h1 {
+            font-family: Georgia, 'Times New Roman', serif;
+            font-size: 1.75rem;
+            font-weight: normal;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
+        .header h1 span { color: var(--gold); }
+        .header p {
+            font-size: 0.9rem;
+            color: #c8d5df;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* ===== MAIN CONTAINER ===== */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 1.5rem;
+        }
+
+        /* ===== SECTION CARDS ===== */
+        .card {
+            background: var(--white);
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .card-number {
+            background: var(--steel-dark);
+            color: var(--gold);
+            font-family: Georgia, serif;
+            font-size: 1rem;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .card-title {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            color: var(--steel-dark);
+        }
+        .card-subtitle {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: -0.75rem;
+            margin-bottom: 1.25rem;
+            line-height: 1.5;
+        }
+
+        /* ===== FORM ELEMENTS ===== */
+        .input-group {
+            margin-bottom: 1.25rem;
+        }
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+        }
+        @media (max-width: 600px) {
+            .input-row { grid-template-columns: 1fr; }
+        }
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--text-mid);
+            margin-bottom: 0.35rem;
+            font-weight: bold;
+        }
+        label .hint {
+            font-weight: normal;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+        }
+        input[type="number"], select {
+            width: 100%;
+            padding: 0.65rem 0.85rem;
+            border: 1.5px solid var(--cream-dark);
+            border-radius: 6px;
+            font-size: 1rem;
+            font-family: Arial, sans-serif;
+            color: var(--text-dark);
+            background: var(--white);
+            transition: border-color 0.2s;
+        }
+        input[type="number"]:focus, select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(201, 162, 39, 0.15);
+        }
+        input[type="number"]::placeholder {
+            color: #bbb;
+        }
+        .input-suffix {
+            position: relative;
+        }
+        .input-suffix span {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            pointer-events: none;
+        }
+
+        /* ===== CONTEXT HINT (inline help) ===== */
+        .context-hint {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-top: 0.3rem;
+            line-height: 1.45;
+            padding-left: 0.15rem;
+        }
+        .context-hint strong {
+            color: var(--steel-dark);
+            font-weight: 600;
+        }
+
+        /* ===== QUICK-SELECT BUTTONS ===== */
+        .quick-select {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.4rem;
+            flex-wrap: wrap;
+        }
+        .quick-select button {
+            font-size: 0.75rem;
+            padding: 0.3rem 0.65rem;
+            border: 1.5px solid var(--cream-dark);
+            border-radius: 20px;
+            background: var(--white);
+            color: var(--text-mid);
+            cursor: pointer;
+            font-family: Arial, sans-serif;
+            transition: all 0.15s;
+        }
+        .quick-select button:hover {
+            border-color: var(--gold);
+            color: var(--steel-dark);
+        }
+        .quick-select button.active {
+            border-color: var(--gold);
+            background: rgba(201, 162, 39, 0.1);
+            color: var(--steel-dark);
+            font-weight: 600;
+        }
+
+        /* ===== SLIDER ===== */
+        .slider-group {
+            margin-bottom: 1.5rem;
+        }
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+        .slider-value {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--steel-dark);
+        }
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: var(--cream-dark);
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: var(--gold);
+            cursor: pointer;
+            border: 3px solid var(--white);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+        .slider-context {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.5rem;
+            padding: 0.6rem 0.85rem;
+            background: var(--cream);
+            border-radius: 6px;
+            line-height: 1.5;
+        }
+        .slider-context strong {
+            color: var(--steel-dark);
+        }
+
+        /* ===== RESULTS ===== */
+        .results-card {
+            background: linear-gradient(135deg, #2f4b60 0%, #375368 50%, #405f73 100%);
+            color: var(--white);
+            border-radius: 8px;
+            padding: 2rem 1.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .results-title {
+            font-family: Georgia, serif;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        .results-title span { color: var(--gold); }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .result-grid { grid-template-columns: 1fr; }
+        }
+        .result-box {
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px;
+            padding: 1.25rem;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.12);
+        }
+        .result-box.highlight {
+            background: rgba(201, 162, 39, 0.15);
+            border-color: var(--gold);
+        }
+        .result-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #a0b4c4;
+            margin-bottom: 0.5rem;
+        }
+        .result-box.highlight .result-label {
+            color: var(--gold-light);
+        }
+        .result-number {
+            font-family: Georgia, serif;
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--white);
+            line-height: 1.2;
+        }
+        .result-box.highlight .result-number {
+            color: var(--gold);
+        }
+        .result-unit {
+            font-size: 0.8rem;
+            color: #8fa8bb;
+            margin-top: 0.25rem;
+        }
+
+        /* ===== COST BREAKDOWN ===== */
+        .breakdown {
+            margin-top: 1.5rem;
+        }
+        .breakdown-title {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--gold);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .breakdown-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        @media (max-width: 600px) {
+            .breakdown-grid { grid-template-columns: 1fr; }
+        }
+        .breakdown-col h4 {
+            font-size: 0.85rem;
+            color: #a0b4c4;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .breakdown-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.35rem 0;
+            font-size: 0.85rem;
+            color: #c8d5df;
+        }
+        .breakdown-item.total {
+            border-top: 1px solid rgba(255,255,255,0.2);
+            margin-top: 0.5rem;
+            padding-top: 0.65rem;
+            font-weight: bold;
+            color: var(--white);
+        }
+        .breakdown-item.total.positive { color: var(--gold); }
+
+        /* ===== WASTE ALERT ===== */
+        .waste-alert {
+            background: var(--red-soft);
+            border: 2px solid #fecaca;
+            border-radius: 8px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .waste-alert h3 {
+            font-family: Georgia, serif;
+            color: var(--red-text);
+            font-size: 1.05rem;
+            margin-bottom: 0.5rem;
+        }
+        .waste-explainer {
+            font-size: 0.82rem;
+            color: #7f1d1d;
+            margin-bottom: 0.75rem;
+            line-height: 1.5;
+            opacity: 0.85;
+        }
+        .waste-number {
+            font-family: Georgia, serif;
+            font-size: 2rem;
+            color: var(--red-text);
+            font-weight: bold;
+        }
+        .waste-detail {
+            font-size: 0.85rem;
+            color: #7f1d1d;
+            margin-top: 0.5rem;
+            line-height: 1.6;
+        }
+
+        /* ===== VERDICT ===== */
+        .verdict-card {
+            border-radius: 8px;
+            padding: 1.75rem;
+            margin-bottom: 1.25rem;
+            text-align: center;
+        }
+        .verdict-card.positive {
+            background: var(--green-soft);
+            border: 2px solid #bbf7d0;
+        }
+        .verdict-card.neutral {
+            background: #fffbeb;
+            border: 2px solid #fde68a;
+        }
+        .verdict-card.negative {
+            background: var(--red-soft);
+            border: 2px solid #fecaca;
+        }
+        .verdict-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+        .verdict-text {
+            font-family: Georgia, serif;
+            font-size: 1.15rem;
+            margin-bottom: 0.5rem;
+        }
+        .verdict-card.positive .verdict-text { color: var(--green-text); }
+        .verdict-card.neutral .verdict-text { color: #92400e; }
+        .verdict-card.negative .verdict-text { color: var(--red-text); }
+        .verdict-detail {
+            font-size: 0.9rem;
+            color: var(--text-mid);
+            max-width: 550px;
+            margin: 0 auto;
+        }
+
+        /* ===== INSIGHT BOX (Kernerkenntnis) ===== */
+        .insight-box {
+            background: var(--steel-dark);
+            color: var(--white);
+            border-radius: 8px;
+            padding: 1.5rem 1.75rem;
+            margin-bottom: 1.25rem;
+        }
+        .insight-box h3 {
+            font-family: Georgia, serif;
+            font-size: 0.95rem;
+            color: var(--gold);
+            margin-bottom: 0.75rem;
+        }
+        .insight-box p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            color: #dce5ec;
+        }
+        .insight-box strong { color: var(--white); }
+
+        /* ===== TIP BOX ===== */
+        .tip-box {
+            background: var(--cream-dark);
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 1.25rem;
+            font-size: 0.88rem;
+            color: var(--text-mid);
+        }
+        .tip-box strong {
+            color: var(--gold);
+        }
+
+        /* ===== SENSITIVITY TABLE ===== */
+        .sensitivity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+        .sensitivity-table th {
+            background: var(--steel-dark);
+            color: var(--white);
+            padding: 0.6rem 0.75rem;
+            text-align: left;
+            font-weight: bold;
+            font-size: 0.78rem;
+        }
+        .sensitivity-table td {
+            padding: 0.55rem 0.75rem;
+            border-bottom: 1px solid var(--cream-dark);
+        }
+        .sensitivity-table tr:nth-child(even) td {
+            background: var(--cream);
+        }
+        .sensitivity-table tr.current td {
+            background: rgba(201, 162, 39, 0.12);
+            font-weight: bold;
+        }
+
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            border-top: 2px solid var(--gold);
+            margin-top: 1rem;
+        }
+        .footer a {
+            color: var(--steel-dark);
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .footer .credit {
+            margin-top: 0.75rem;
+            font-size: 0.72rem;
+            color: #aaa;
+        }
+
+        /* ===== BUTTON ===== */
+        .btn-calculate {
+            display: block;
+            width: 100%;
+            padding: 0.9rem;
+            background: var(--gold);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-family: Arial, sans-serif;
+            letter-spacing: 0.5px;
+        }
+        .btn-calculate:hover {
+            background: var(--gold-light);
+        }
+
+        /* ===== ANIMATIONS ===== */
+        .fade-in {
+            animation: fadeIn 0.4s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== SCENARIO SELECTOR ===== */
+        .scenario-bar {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .scenario-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.7rem 0.75rem;
+            border: 2px solid var(--cream-dark);
+            border-radius: 8px;
+            background: var(--white);
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            font-family: Arial, sans-serif;
+        }
+        .scenario-btn:hover {
+            border-color: var(--gold);
+        }
+        .scenario-btn.active {
+            border-color: var(--gold);
+            background: rgba(201, 162, 39, 0.08);
+        }
+        .scenario-btn .scenario-label {
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            margin-bottom: 0.15rem;
+        }
+        .scenario-btn .scenario-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--steel-dark);
+        }
+        .scenario-btn .scenario-detail {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 0.15rem;
+        }
+
+        /* ===== PRINT STYLES ===== */
+        @media print {
+            body { background: white; }
+            .header { break-after: avoid; }
+            .card, .results-card, .waste-alert, .verdict-card { break-inside: avoid; }
+            .btn-calculate { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== HEADER ===== -->
+<div class="header">
+    <div class="header-label">Kompendium 2026 &mdash; KI-Botschafter-Programm f&uuml;r KMU</div>
+    <h1>Was kostet euch <span>ungenutztes KI-Potenzial?</span></h1>
+    <p>Die meisten KMU zahlen bereits f&uuml;r KI-Lizenzen &ndash; aber nur ein Bruchteil der Mitarbeitenden nutzt sie. Dieser Rechner zeigt dir in 2 Minuten, was das konkret kostet und wie ein Botschafter-Programm den Hebel umlegt.</p>
+</div>
+
+<!-- ===== MAIN ===== -->
+<div class="container">
+
+    <!-- SCENARIO SELECTOR -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-number" style="font-size: 0.8rem;">&#9733;</div>
+            <div class="card-title">Schnellstart: W&auml;hle dein Szenario</div>
+        </div>
+        <p class="card-subtitle">Wir f&uuml;llen realistische Werte vor. Du kannst danach alles anpassen.</p>
+        <div class="scenario-bar">
+            <button class="scenario-btn" onclick="loadScenario('small')">
+                <div class="scenario-label">Kleines KMU</div>
+                <div class="scenario-name">50 MA</div>
+                <div class="scenario-detail">Handwerk, Dienstleister</div>
+            </button>
+            <button class="scenario-btn active" onclick="loadScenario('medium')">
+                <div class="scenario-label">Mittleres KMU</div>
+                <div class="scenario-name">150 MA</div>
+                <div class="scenario-detail">Produktion, Vertrieb</div>
+            </button>
+            <button class="scenario-btn" onclick="loadScenario('large')">
+                <div class="scenario-label">Gr&ouml;&szlig;eres KMU</div>
+                <div class="scenario-name">500 MA</div>
+                <div class="scenario-detail">Industrie, Konzern</div>
+            </button>
+        </div>
+    </div>
+
+    <!-- SECTION 1: Unternehmensdaten -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-number">1</div>
+            <div class="card-title">Dein Unternehmen</div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <label>Anzahl Mitarbeitende <span class="hint">(die KI nutzen k&ouml;nnten)</span></label>
+                <input type="number" id="employees" value="150" min="10" max="5000" step="10">
+                <div class="context-hint">Nicht alle &ndash; nur B&uuml;ro-/Wissensarbeiter, die am PC arbeiten.</div>
+            </div>
+            <div class="input-group">
+                <label>Durchschn. Brutto-Stundensatz <span class="hint">(inkl. Lohnnebenkosten)</span></label>
+                <div class="input-suffix">
+                    <input type="number" id="hourlyRate" value="55" min="20" max="200" step="5">
+                    <span>&euro;/Std</span>
+                </div>
+                <div class="context-hint"><strong>Faustregel:</strong> Jahresgehalt &divide; 1.600 Std &times; 1,3 (Nebenkosten). Bei 50k Gehalt &asymp; 41 &euro;, bei 70k &asymp; 57 &euro;.</div>
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <label>KI-Lizenzkosten pro Person <span class="hint">(z.B. Copilot, ChatGPT Team)</span></label>
+                <div class="input-suffix">
+                    <input type="number" id="licenseCost" value="30" min="0" max="200" step="5">
+                    <span>&euro;/Monat</span>
+                </div>
+                <div class="quick-select" id="licenseQuickSelect">
+                    <button onclick="setLicense(0)">Keine Lizenzen</button>
+                    <button onclick="setLicense(20)" class="active">ChatGPT Team (~20&euro;)</button>
+                    <button onclick="setLicense(30)">Copilot (~30&euro;)</button>
+                    <button onclick="setLicense(55)">Copilot + ChatGPT</button>
+                </div>
+            </div>
+            <div class="input-group">
+                <label>Aktuelle KI-Nutzungsrate</label>
+                <div class="input-suffix">
+                    <input type="number" id="currentUsage" value="25" min="0" max="100" step="5">
+                    <span>%</span>
+                </div>
+                <div class="quick-select" id="usageQuickSelect">
+                    <button onclick="setUsage(10)">Kaum (~10%)</button>
+                    <button onclick="setUsage(25)" class="active">Vereinzelt (~25%)</button>
+                    <button onclick="setUsage(40)">Teilweise (~40%)</button>
+                    <button onclick="setUsage(60)">Verbreitet (~60%)</button>
+                </div>
+                <div class="context-hint">Wie viel Prozent nutzen KI mindestens 1&times; pro Woche? <strong>Tipp:</strong> Die meisten KMU liegen bei 15&ndash;30%. Wenn du unsicher bist, w&auml;hle &bdquo;Vereinzelt&ldquo; &ndash; das ist der h&auml;ufigste Startpunkt.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 2: Erwartete Wirkung -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-number">2</div>
+            <div class="card-title">Erwartete Wirkung</div>
+        </div>
+        <p class="card-subtitle">Was passiert, wenn mehr Mitarbeitende KI sinnvoll nutzen? Die Voreinstellungen basieren auf Erfahrungswerten &ndash; passe sie nach deiner Einsch&auml;tzung an.</p>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <label>Zeitersparnis pro Person durch KI</label>
+                <div class="slider-value" id="timeSavingsDisplay">3 Std/Woche</div>
+            </div>
+            <input type="range" id="timeSavings" min="0.5" max="10" step="0.5" value="3">
+            <div class="slider-labels">
+                <span>0,5 Std</span>
+                <span>5 Std</span>
+                <span>10 Std</span>
+            </div>
+            <div class="slider-context">
+                <strong>Einordnung:</strong> Studien zeigen 2&ndash;5 Stunden Ersparnis pro Woche f&uuml;r geschulte Mitarbeitende.
+                Typische Werte: Sachbearbeitung ~2 Std, Marketing/Kommunikation ~4 Std, Entwicklung/Analyse ~5 Std.
+                <strong>Voreinstellung 3 Std = konservativer Durchschnitt.</strong>
+            </div>
+        </div>
+
+        <div class="slider-group">
+            <div class="slider-header">
+                <label>Ziel-Nutzungsrate nach 12 Monaten</label>
+                <div class="slider-value" id="targetUsageDisplay">70%</div>
+            </div>
+            <input type="range" id="targetUsage" min="30" max="95" step="5" value="70">
+            <div class="slider-labels">
+                <span>30% (konservativ)</span>
+                <span>65% (realistisch)</span>
+                <span>95% (Best Case)</span>
+            </div>
+            <div class="slider-context">
+                <strong>Benchmark:</strong> Unternehmen mit aktiven Botschafter-Programmen erreichen typischerweise 60&ndash;80% Nutzungsrate.
+                Die Boise State University steigerte ihre Nutzung um +900%. Otto Group erreichte 10.000 aktive monatliche KI-Nutzer.
+                <strong>70% nach 12 Monaten ist ein realistisches Ziel.</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- SECTION 3: Programmkosten -->
+    <div class="card">
+        <div class="card-header">
+            <div class="card-number">3</div>
+            <div class="card-title">Investment ins Botschafter-Programm</div>
+        </div>
+        <p class="card-subtitle">Was kostet der Aufbau? Die Werte sind vorausgef&uuml;llt &ndash; passe sie an euer Budget an.</p>
+        <div class="input-row">
+            <div class="input-group">
+                <label>Anzahl Botschafter <span class="hint" id="botschafterHint">(Empfehlung: 5&ndash;8)</span></label>
+                <input type="number" id="ambassadors" value="6" min="1" max="50" step="1">
+                <div class="context-hint"><strong>Faustregel:</strong> 1 Botschafter pro 20&ndash;30 Mitarbeitende. Bei 150 MA also 5&ndash;8 Personen.</div>
+            </div>
+            <div class="input-group">
+                <label>Zeitbudget pro Botschafter <span class="hint">(Std/Woche)</span></label>
+                <div class="input-suffix">
+                    <input type="number" id="ambassadorHours" value="4" min="2" max="16" step="1">
+                    <span>Std/Wo</span>
+                </div>
+                <div class="context-hint">Zeit f&uuml;r Sprechstunden, Schulungen, Community-Pflege. <strong>Typisch: 3&ndash;6 Std/Woche</strong> (ca. 10&ndash;15% der Arbeitszeit).</div>
+            </div>
+        </div>
+        <div class="input-row">
+            <div class="input-group">
+                <label>Initiales Training <span class="hint">(Kick-off, Schulung, Materialien)</span></label>
+                <div class="input-suffix">
+                    <input type="number" id="trainingCost" value="12000" min="0" max="100000" step="1000">
+                    <span>&euro;</span>
+                </div>
+                <div class="context-hint">Externes Training + Materialien. Bandbreite: 5.000&ndash;20.000 &euro; je nach Umfang.</div>
+            </div>
+            <div class="input-group">
+                <label>Laufende Kosten/Jahr <span class="hint">(Events, Tools, Plattform)</span></label>
+                <div class="input-suffix">
+                    <input type="number" id="ongoingCost" value="6000" min="0" max="100000" step="1000">
+                    <span>&euro;/Jahr</span>
+                </div>
+                <div class="context-hint">F&uuml;r Community-Events, Lunch &amp; Learn, Plattform-Lizenzen. Oft 3.000&ndash;10.000 &euro;/Jahr.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CALCULATE BUTTON -->
+    <button class="btn-calculate" onclick="calculate()">Ergebnis berechnen</button>
+
+    <!-- ===== RESULTS (hidden until calculated) ===== -->
+    <div id="results" style="display: none;">
+
+        <!-- WASTE ALERT -->
+        <div class="waste-alert fade-in" id="wasteAlert">
+            <h3>&#9888;&#65039; So viel zahlt ihr aktuell f&uuml;r ungenutzte KI-Lizenzen</h3>
+            <div class="waste-explainer">
+                Jede Lizenz, die nicht aktiv genutzt wird, ist eine laufende Ausgabe ohne R&uuml;ckfluss.
+                Hier seht ihr, was die Differenz zwischen bezahlten und genutzten Lizenzen pro Jahr kostet:
+            </div>
+            <div class="waste-number" id="wasteAmount">&mdash;</div>
+            <div class="waste-detail" id="wasteDetail"></div>
+        </div>
+
+        <!-- MAIN RESULTS -->
+        <div class="results-card fade-in">
+            <div class="results-title">Ergebnis: <span>Dein ROI auf einen Blick</span></div>
+
+            <div class="result-grid">
+                <div class="result-box highlight">
+                    <div class="result-label">Return on Investment</div>
+                    <div class="result-number" id="roiPercent">&mdash;</div>
+                    <div class="result-unit">nach 12 Monaten</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Break-Even nach</div>
+                    <div class="result-number" id="breakEven">&mdash;</div>
+                    <div class="result-unit">Monaten</div>
+                </div>
+                <div class="result-box">
+                    <div class="result-label">Netto-Gewinn Jahr 1</div>
+                    <div class="result-number" id="netGain">&mdash;</div>
+                    <div class="result-unit">Euro</div>
+                </div>
+            </div>
+
+            <!-- COST BREAKDOWN -->
+            <div class="breakdown">
+                <div class="breakdown-title">Detailrechnung</div>
+                <div class="breakdown-grid">
+                    <div class="breakdown-col">
+                        <h4>&#128178; Kosten (Gesamtinvestment)</h4>
+                        <div class="breakdown-item">
+                            <span>Botschafter-Arbeitszeit</span>
+                            <span id="costAmbassadorTime">&mdash;</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Initiales Training</span>
+                            <span id="costTraining">&mdash;</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Laufende Kosten</span>
+                            <span id="costOngoing">&mdash;</span>
+                        </div>
+                        <div class="breakdown-item total">
+                            <span>Gesamt-Investment</span>
+                            <span id="costTotal">&mdash;</span>
+                        </div>
+                    </div>
+                    <div class="breakdown-col">
+                        <h4>&#128200; Nutzen (Produktivit&auml;tsgewinn)</h4>
+                        <div class="breakdown-item">
+                            <span>Eingesparte Stunden/Jahr</span>
+                            <span id="savedHours">&mdash;</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>Monetarisierter Wert</span>
+                            <span id="savedValue">&mdash;</span>
+                        </div>
+                        <div class="breakdown-item">
+                            <span>+ Eingesparte Lizenzkosten</span>
+                            <span id="savedLicenses">&mdash;</span>
+                        </div>
+                        <div class="breakdown-item total positive">
+                            <span>Gesamt-Nutzen</span>
+                            <span id="benefitTotal">&mdash;</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- VERDICT -->
+        <div class="verdict-card fade-in" id="verdictCard">
+            <div class="verdict-icon" id="verdictIcon"></div>
+            <div class="verdict-text" id="verdictText"></div>
+            <div class="verdict-detail" id="verdictDetail"></div>
+        </div>
+
+        <!-- SENSITIVITY TABLE -->
+        <div class="card fade-in">
+            <div class="card-header">
+                <div class="card-number">?</div>
+                <div class="card-title">Was w&auml;re wenn? &mdash; Sensitivit&auml;tsanalyse</div>
+            </div>
+            <p style="font-size: 0.88rem; color: var(--text-mid); margin-bottom: 1rem;">
+                So ver&auml;ndert sich dein ROI bei unterschiedlicher Zeitersparnis pro Mitarbeiter. Die gelb markierte Zeile zeigt deine aktuelle Einstellung:
+            </p>
+            <table class="sensitivity-table" id="sensitivityTable">
+                <thead>
+                    <tr>
+                        <th>Zeitersparnis/Woche</th>
+                        <th>Eingesparte Std/Jahr</th>
+                        <th>Produktivit&auml;tsgewinn</th>
+                        <th>ROI</th>
+                        <th>Break-Even</th>
+                    </tr>
+                </thead>
+                <tbody id="sensitivityBody">
+                </tbody>
+            </table>
+        </div>
+
+        <!-- INSIGHT BOX -->
+        <div class="insight-box fade-in">
+            <h3>&#128218; Kernerkenntnis</h3>
+            <p>
+                Der gr&ouml;&szlig;te Hebel liegt nicht in der Technologie, sondern in der <strong>Nutzungsrate</strong>.
+                Ein Unternehmen mit 150 Mitarbeitenden, das seine KI-Nutzungsrate von 25% auf 70% steigert,
+                gewinnt nicht 45% mehr Produktivit&auml;t &mdash; es gewinnt den <strong>gesamten ungenutzten Wert</strong>
+                seiner bestehenden Investition zur&uuml;ck. Genau daf&uuml;r sorgen KI-Botschafter.
+            </p>
+        </div>
+
+        <!-- CTA -->
+        <div class="card fade-in" style="text-align: center; padding: 2rem;">
+            <p style="font-family: Georgia, serif; font-size: 1.1rem; color: var(--steel-dark); margin-bottom: 0.75rem;">
+                Du m&ouml;chtest wissen, wie ein Botschafter-Programm<br>konkret in deinem Unternehmen aussehen kann?
+            </p>
+            <p style="font-size: 0.9rem; color: var(--text-mid); margin-bottom: 1.25rem;">
+                Im <strong>Kompendium &bdquo;KI-Botschafter-Programm f&uuml;r KMU&ldquo;</strong> findest du den kompletten
+                Fahrplan &mdash; mit Toolboxen, Mail-Templates, Checklisten und Governance-Vorlagen.
+            </p>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">
+                Nina Lindner &middot; xpand Deutschland GmbH<br>
+                <strong>KI kommt &uuml;ber Menschen ins Unternehmen, nicht &uuml;ber Tools.</strong>
+            </p>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+        <p>ROI-Rechner zum KI-Botschafter-Kompendium 2026 &middot; Nina Lindner &middot; xpand Deutschland GmbH</p>
+        <p class="credit">Vom Menschen erdacht, von KI erweitert, vom Menschen gepr&uuml;ft und f&uuml;r gut befunden &hearts;</p>
+    </div>
+</div>
+
+<script>
+    // ===== SCENARIOS =====
+    const scenarios = {
+        small: { employees: 50, hourlyRate: 45, licenseCost: 20, currentUsage: 15, timeSavings: 2, targetUsage: 65, ambassadors: 2, ambassadorHours: 3, trainingCost: 5000, ongoingCost: 3000 },
+        medium: { employees: 150, hourlyRate: 55, licenseCost: 30, currentUsage: 25, timeSavings: 3, targetUsage: 70, ambassadors: 6, ambassadorHours: 4, trainingCost: 12000, ongoingCost: 6000 },
+        large: { employees: 500, hourlyRate: 60, licenseCost: 30, currentUsage: 30, timeSavings: 3.5, targetUsage: 75, ambassadors: 18, ambassadorHours: 5, trainingCost: 25000, ongoingCost: 15000 }
+    };
+
+    function loadScenario(size) {
+        const s = scenarios[size];
+        document.getElementById('employees').value = s.employees;
+        document.getElementById('hourlyRate').value = s.hourlyRate;
+        document.getElementById('licenseCost').value = s.licenseCost;
+        document.getElementById('currentUsage').value = s.currentUsage;
+        document.getElementById('timeSavings').value = s.timeSavings;
+        document.getElementById('targetUsage').value = s.targetUsage;
+        document.getElementById('ambassadors').value = s.ambassadors;
+        document.getElementById('ambassadorHours').value = s.ambassadorHours;
+        document.getElementById('trainingCost').value = s.trainingCost;
+        document.getElementById('ongoingCost').value = s.ongoingCost;
+
+        timeSavingsDisplay.textContent = s.timeSavings + ' Std/Woche';
+        targetUsageDisplay.textContent = s.targetUsage + '%';
+
+        // Update active states
+        document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+
+        // Update quick-select active states
+        updateUsageQuickSelect(s.currentUsage);
+        updateLicenseQuickSelect(s.licenseCost);
+
+        // Update Botschafter hint
+        updateBotschafterHint(s.employees);
+
+        calculate();
+    }
+
+    // ===== QUICK SELECT HELPERS =====
+    function setLicense(val) {
+        document.getElementById('licenseCost').value = val;
+        updateLicenseQuickSelect(val);
+        calculate();
+    }
+
+    function setUsage(val) {
+        document.getElementById('currentUsage').value = val;
+        updateUsageQuickSelect(val);
+        calculate();
+    }
+
+    function updateLicenseQuickSelect(val) {
+        const mapping = { 0: 0, 20: 1, 30: 2, 55: 3 };
+        document.querySelectorAll('#licenseQuickSelect button').forEach((btn, i) => {
+            btn.classList.toggle('active', i === mapping[val]);
+        });
+    }
+
+    function updateUsageQuickSelect(val) {
+        const mapping = { 10: 0, 25: 1, 40: 2, 60: 3 };
+        document.querySelectorAll('#usageQuickSelect button').forEach((btn, i) => {
+            btn.classList.toggle('active', i === mapping[val]);
+        });
+    }
+
+    // ===== LIVE UPDATES =====
+    const timeSavingsSlider = document.getElementById('timeSavings');
+    const timeSavingsDisplay = document.getElementById('timeSavingsDisplay');
+    const targetUsageSlider = document.getElementById('targetUsage');
+    const targetUsageDisplay = document.getElementById('targetUsageDisplay');
+    const employeesInput = document.getElementById('employees');
+    const botschafterHint = document.getElementById('botschafterHint');
+
+    timeSavingsSlider.addEventListener('input', () => {
+        timeSavingsDisplay.textContent = timeSavingsSlider.value + ' Std/Woche';
+    });
+
+    targetUsageSlider.addEventListener('input', () => {
+        targetUsageDisplay.textContent = targetUsageSlider.value + '%';
+    });
+
+    function updateBotschafterHint(emp) {
+        let rec;
+        if (emp <= 100) rec = '2\u20134';
+        else if (emp <= 250) rec = '5\u20138';
+        else if (emp <= 500) rec = '10\u201315';
+        else rec = '15\u201325';
+        botschafterHint.textContent = '(Empfehlung: ' + rec + ')';
+    }
+
+    employeesInput.addEventListener('input', () => {
+        updateBotschafterHint(parseInt(employeesInput.value) || 0);
+    });
+
+    // ===== FORMATTING =====
+    function formatEuro(num) {
+        return new Intl.NumberFormat('de-DE', {
+            style: 'currency',
+            currency: 'EUR',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(num);
+    }
+
+    function formatNumber(num) {
+        return new Intl.NumberFormat('de-DE', {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0
+        }).format(num);
+    }
+
+    // ===== MAIN CALCULATION =====
+    function calculate() {
+        // Inputs
+        const employees = parseInt(document.getElementById('employees').value) || 0;
+        const hourlyRate = parseFloat(document.getElementById('hourlyRate').value) || 0;
+        const licenseCost = parseFloat(document.getElementById('licenseCost').value) || 0;
+        const currentUsage = parseFloat(document.getElementById('currentUsage').value) / 100;
+        const timeSavings = parseFloat(document.getElementById('timeSavings').value) || 0;
+        const targetUsage = parseFloat(document.getElementById('targetUsage').value) / 100;
+        const ambassadors = parseInt(document.getElementById('ambassadors').value) || 0;
+        const ambassadorHours = parseFloat(document.getElementById('ambassadorHours').value) || 0;
+        const trainingCost = parseFloat(document.getElementById('trainingCost').value) || 0;
+        const ongoingCost = parseFloat(document.getElementById('ongoingCost').value) || 0;
+        const weeksPerYear = 48;
+
+        // === WASTE CALCULATION ===
+        const unusedLicenses = employees * (1 - currentUsage);
+        const wastePerMonth = unusedLicenses * licenseCost;
+        const wastePerYear = wastePerMonth * 12;
+
+        const wasteAlert = document.getElementById('wasteAlert');
+        if (licenseCost > 0 && currentUsage < 1) {
+            wasteAlert.style.display = 'block';
+            document.getElementById('wasteAmount').textContent = formatEuro(wastePerYear) + ' / Jahr';
+            document.getElementById('wasteDetail').innerHTML =
+                formatNumber(Math.round(unusedLicenses)) + ' von ' + employees +
+                ' Mitarbeitenden nutzen ihre KI-Lizenz nicht regelm\u00e4\u00dfig. ' +
+                'Das sind ' + formatEuro(wastePerMonth) + ' pro Monat an bezahlten, aber ungenutzten Lizenzen \u2013 ' +
+                '<strong>noch bevor wir die entgangene Produktivit\u00e4t einrechnen.</strong>';
+        } else {
+            wasteAlert.style.display = 'none';
+        }
+
+        // === COST CALCULATION ===
+        const costAmbassadorTime = ambassadors * ambassadorHours * weeksPerYear * hourlyRate;
+        const costTotal = costAmbassadorTime + trainingCost + ongoingCost;
+
+        // === BENEFIT CALCULATION ===
+        const additionalAdopters = employees * (targetUsage - currentUsage);
+        const newUserHours = additionalAdopters * timeSavings * weeksPerYear;
+        const existingUserBoost = employees * currentUsage * (timeSavings * 0.2) * weeksPerYear;
+        const totalSavedHours = newUserHours + existingUserBoost;
+        const productivityGain = totalSavedHours * hourlyRate;
+
+        const newUnused = employees * (1 - targetUsage);
+        const savedLicenseCosts = (unusedLicenses - newUnused) * licenseCost * 12;
+        const savedLicenseValue = Math.max(0, savedLicenseCosts);
+
+        const totalBenefit = productivityGain + savedLicenseValue;
+        const netGain = totalBenefit - costTotal;
+        const roi = costTotal > 0 ? ((totalBenefit - costTotal) / costTotal * 100) : 0;
+
+        const monthlyBenefit = totalBenefit / 12;
+        const breakEvenMonths = monthlyBenefit > 0 ? costTotal / monthlyBenefit : 99;
+
+        // === DISPLAY RESULTS ===
+        document.getElementById('results').style.display = 'block';
+
+        document.getElementById('roiPercent').textContent = Math.round(roi) + '%';
+        document.getElementById('breakEven').textContent =
+            breakEvenMonths < 1 ? '< 1' : breakEvenMonths > 24 ? '> 24' : Math.round(breakEvenMonths * 10) / 10;
+        document.getElementById('netGain').textContent = formatEuro(netGain);
+
+        document.getElementById('costAmbassadorTime').textContent = formatEuro(costAmbassadorTime);
+        document.getElementById('costTraining').textContent = formatEuro(trainingCost);
+        document.getElementById('costOngoing').textContent = formatEuro(ongoingCost);
+        document.getElementById('costTotal').textContent = formatEuro(costTotal);
+
+        document.getElementById('savedHours').textContent = formatNumber(Math.round(totalSavedHours)) + ' Std';
+        document.getElementById('savedValue').textContent = formatEuro(productivityGain);
+        document.getElementById('savedLicenses').textContent = formatEuro(savedLicenseValue);
+        document.getElementById('benefitTotal').textContent = formatEuro(totalBenefit);
+
+        // === VERDICT ===
+        const verdictCard = document.getElementById('verdictCard');
+        const verdictIcon = document.getElementById('verdictIcon');
+        const verdictText = document.getElementById('verdictText');
+        const verdictDetail = document.getElementById('verdictDetail');
+
+        verdictCard.className = 'verdict-card fade-in';
+
+        if (roi >= 200) {
+            verdictCard.classList.add('positive');
+            verdictIcon.textContent = '\u2705';
+            verdictText.textContent = 'Klare Empfehlung: Das Botschafter-Programm rechnet sich deutlich.';
+            verdictDetail.textContent = 'Mit einem ROI von ' + Math.round(roi) +
+                '% und Break-Even nach ' + (Math.round(breakEvenMonths * 10) / 10) +
+                ' Monaten ist die Investition wirtschaftlich sehr attraktiv. ' +
+                'Jeder Monat ohne Programm kostet dein Unternehmen ' +
+                formatEuro(Math.round(totalBenefit / 12)) + ' an ungenutztem Potenzial.';
+        } else if (roi >= 50) {
+            verdictCard.classList.add('positive');
+            verdictIcon.textContent = '\u{1F44D}';
+            verdictText.textContent = 'Lohnt sich: Solider Business Case f\u00fcr ein Botschafter-Programm.';
+            verdictDetail.textContent = 'Ein ROI von ' + Math.round(roi) +
+                '% zeigt, dass sich die Investition auszahlt. ' +
+                'Tipp: Starte mit einer Pilotabteilung und skaliere nach den ersten Erfolgen.';
+        } else if (roi >= 0) {
+            verdictCard.classList.add('neutral');
+            verdictIcon.textContent = '\u{1F914}';
+            verdictText.textContent = 'Knapp positiv \u2013 pr\u00fcfe die Annahmen.';
+            verdictDetail.textContent = 'Der ROI ist positiv, aber nicht \u00fcberw\u00e4ltigend. ' +
+                '\u00dcberpr\u00fcfe: Ist die gesch\u00e4tzte Zeitersparnis realistisch? ' +
+                'K\u00f6nntest du mit weniger Botschaftern starten? ' +
+                'Oft steigt der ROI im zweiten Jahr deutlich, wenn die Community w\u00e4chst.';
+        } else {
+            verdictCard.classList.add('negative');
+            verdictIcon.textContent = '\u26A0\uFE0F';
+            verdictText.textContent = 'Noch nicht wirtschaftlich \u2013 aber pr\u00fcfe die Parameter.';
+            verdictDetail.textContent = 'Mit den aktuellen Annahmen rechnet sich das Programm nicht im ersten Jahr. ' +
+                'Typische Hebel: Zeitersparnis h\u00f6her ansetzen (Branchenbenchmarks pr\u00fcfen), ' +
+                'schlanker starten (weniger Botschafter, weniger Zeitbudget), ' +
+                'oder l\u00e4ngeren Zeithorizont betrachten (18-24 Monate).';
+        }
+
+        // === SENSITIVITY TABLE ===
+        const tbody = document.getElementById('sensitivityBody');
+        tbody.innerHTML = '';
+        const savingsOptions = [1, 2, 3, 4, 5, 6, 8, 10];
+
+        savingsOptions.forEach(s => {
+            const sNewHours = additionalAdopters * s * weeksPerYear;
+            const sExistBoost = employees * currentUsage * (s * 0.2) * weeksPerYear;
+            const sTotalHours = sNewHours + sExistBoost;
+            const sValue = sTotalHours * hourlyRate;
+            const sTotalBenefit = sValue + savedLicenseValue;
+            const sRoi = costTotal > 0 ? ((sTotalBenefit - costTotal) / costTotal * 100) : 0;
+            const sBE = (sTotalBenefit / 12) > 0 ? costTotal / (sTotalBenefit / 12) : 99;
+
+            const tr = document.createElement('tr');
+            if (s === timeSavings) tr.className = 'current';
+            tr.innerHTML =
+                '<td>' + s + ' Std/Woche</td>' +
+                '<td>' + formatNumber(Math.round(sTotalHours)) + ' Std</td>' +
+                '<td>' + formatEuro(sValue) + '</td>' +
+                '<td>' + Math.round(sRoi) + '%</td>' +
+                '<td>' + (sBE < 1 ? '< 1 Mon.' : sBE > 24 ? '> 24 Mon.' : Math.round(sBE * 10) / 10 + ' Mon.') + '</td>';
+            tbody.appendChild(tr);
+        });
+
+        // Scroll to results
+        document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    // Auto-calculate on load
+    window.addEventListener('load', calculate);
+</script>
+
+</body>
+</html>
