@@ -1014,9 +1014,7 @@
     <div class="footer">
         <p>ROI-Rechner zum KI-Botschafter-Kompendium 2026 &middot; Nina Lindner &middot; xpand Deutschland GmbH</p>
         <div class="links">
-            <a href="https://www.linkedin.com/in/nina-lindner/" target="_blank" rel="noopener">&#128279; LinkedIn-Profil</a>
-            &middot;
-            <a href="https://www.linkedin.com/in/nina-lindner/" target="_blank" rel="noopener">&#128218; Kompendium &amp; Whitepaper</a>
+            <a href="https://www.linkedin.com/in/nina-lindner/" target="_blank" rel="noopener">&#128279; Nina Lindner auf LinkedIn</a>
         </div>
         <div class="privacy">
             <strong>&#128274; Datenschutzhinweis:</strong> Dieser Rechner verarbeitet alle Daten <strong>ausschlie&szlig;lich lokal in eurem Browser</strong>.
@@ -1116,30 +1114,45 @@
 
     function loadScenario(size) {
         const s = scenarios[size];
+        const selectedIndustry = document.getElementById('industrySelect').value;
+
+        // Always set size-dependent values from scenario
         document.getElementById('employees').value = s.employees;
-        document.getElementById('hourlyRate').value = s.hourlyRate;
-        document.getElementById('licenseCost').value = s.licenseCost;
-        document.getElementById('currentUsage').value = s.currentUsage;
-        document.getElementById('timeSavings').value = s.timeSavings;
-        document.getElementById('targetUsage').value = s.targetUsage;
         document.getElementById('ambassadors').value = s.ambassadors;
         document.getElementById('trainingCost').value = s.trainingCost;
         document.getElementById('ongoingCost').value = s.ongoingCost;
 
-        timeSavingsDisplay.textContent = s.timeSavings + ' Std/Woche';
-        targetUsageDisplay.textContent = s.targetUsage + '%';
+        // If industry is selected, keep industry-specific values; otherwise use scenario defaults
+        if (selectedIndustry && industries[selectedIndustry]) {
+            const ind = industries[selectedIndustry];
+            document.getElementById('hourlyRate').value = ind.hourlyRate;
+            document.getElementById('licenseCost').value = ind.licenseCost;
+            document.getElementById('currentUsage').value = ind.currentUsage;
+            document.getElementById('timeSavings').value = ind.timeSavings;
+            document.getElementById('targetUsage').value = ind.targetUsage;
+
+            timeSavingsDisplay.textContent = ind.timeSavings + ' Std/Woche';
+            targetUsageDisplay.textContent = ind.targetUsage + '%';
+
+            updateUsageQuickSelect(ind.currentUsage);
+            updateLicenseQuickSelect(ind.licenseCost);
+        } else {
+            document.getElementById('hourlyRate').value = s.hourlyRate;
+            document.getElementById('licenseCost').value = s.licenseCost;
+            document.getElementById('currentUsage').value = s.currentUsage;
+            document.getElementById('timeSavings').value = s.timeSavings;
+            document.getElementById('targetUsage').value = s.targetUsage;
+
+            timeSavingsDisplay.textContent = s.timeSavings + ' Std/Woche';
+            targetUsageDisplay.textContent = s.targetUsage + '%';
+
+            updateUsageQuickSelect(s.currentUsage);
+            updateLicenseQuickSelect(s.licenseCost);
+        }
 
         // Update active states
         document.querySelectorAll('.scenario-btn').forEach(btn => btn.classList.remove('active'));
         event.currentTarget.classList.add('active');
-
-        // Reset industry dropdown (scenario overrides industry values)
-        document.getElementById('industrySelect').value = '';
-        document.getElementById('industryValues').classList.remove('visible');
-
-        // Update quick-select active states
-        updateUsageQuickSelect(s.currentUsage);
-        updateLicenseQuickSelect(s.licenseCost);
 
         // Update Botschafter hint
         updateBotschafterHint(s.employees);
@@ -1199,8 +1212,28 @@
         botschafterHint.textContent = '(Empfehlung: ' + rec + ')';
     }
 
+    function getRecommendedAmbassadors(emp) {
+        if (emp <= 0) return 2;
+        if (emp <= 100) {
+            // Empfehlung: 2–4
+            return Math.max(2, Math.round(2 + (emp / 100) * 2));
+        }
+        if (emp <= 250) {
+            // Empfehlung: 5–8
+            return Math.round(5 + ((emp - 101) / 149) * 3);
+        }
+        if (emp <= 500) {
+            // Empfehlung: 10–15
+            return Math.round(10 + ((emp - 251) / 249) * 5);
+        }
+        // 500+: Empfehlung 15–25, darüber hinaus sanft skalierend
+        return Math.round(15 + ((emp - 501) / 500) * 10);
+    }
+
     employeesInput.addEventListener('input', () => {
-        updateBotschafterHint(parseInt(employeesInput.value) || 0);
+        const emp = parseInt(employeesInput.value) || 0;
+        updateBotschafterHint(emp);
+        document.getElementById('ambassadors').value = getRecommendedAmbassadors(emp);
     });
 
     // ===== FORMATTING =====
